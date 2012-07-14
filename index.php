@@ -3,6 +3,12 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+		<!--link rel="apple-touch-icon" href="images/icon.png" /-->
+		<!--link rel="apple-touch-startup-image" href="images/load.png" /-->
+		<link rel="stylesheet" href="css/add2home.css">
+		<script type="application/javascript" src="js/add2home.js"></script>
         <title>
 			St John's Worship Feedback
         </title>
