@@ -60,29 +60,29 @@
                         <option value="">
                             
                         </option>
-						<option value="Ben">
-                           Ben 
+						<option value="Ben Baggett">
+                           Ben Baggett
                         </option>
-						<option value="James">
-                            James
+						<option value="James Hammerstein">
+                            James Hammerstein
                         </option>
-						<option value="Johnny">
-                            Johnny
+						<option value="Johnny Sheppard">
+                            Johnny Sheppard
                         </option>
-						<option value="Malcolm">
-                            Malcolm
+						<option value="Malcolm Bateman">
+                            Malcolm Bateman
                         </option>
-						<option value="Nicki">
-                            Nicki
+						<option value="Nicki Sudworth">
+                            Nicki Sudworth
                         </option>
-						<option value="Philippa">
-                            Philippa
+						<option value="Philippa Stuart">
+                            Philippa Stuart
                         </option>
-						<option value="Richard">
-                            Richard
+						<option value="Richard Jack">
+                            Richard Jack
                         </option>
-						<option value="Tim">
-                            Tim
+						<option value="Tim Sudworth">
+                            Tim Sudworth
                         </option>
                     </select>
                 </div>
