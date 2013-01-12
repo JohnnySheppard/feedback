@@ -110,6 +110,12 @@
                         <input id="textinput3" name="textinput3" placeholder="Email Address" value="" type="email" />
                     </fieldset>
                 </div>
+				<div data-role="fieldcontain">
+                    <fieldset data-role="controlgroup">
+                        <input type="checkbox" name="checkbox1" id="checkbox1" class="custom" />
+						<label for="checkbox1">Fill Survey in Now</label>
+						</fieldset>
+                </div>
                 <input type="submit" data-icon="check" data-iconpos="right" value="Invite"/>
 			</form>
             </div>

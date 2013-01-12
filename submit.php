@@ -1,38 +1,57 @@
 <?PHP
+
+$survey_now = 0;
+$token = null;
+
 if (isset($_GET["selectmenu1"]) && isset($_GET["selectmenu2"]) && isset($_GET["textinput1"]) && isset($_GET["textinput2"]) && isset($_GET["textinput3"])){
-	//create the csv file
-	$fp = fopen('tmp/participant.csv', 'w');
-
-	//work out valid from and until.
-	$start = date("Y-m-d",$_GET["selectmenu1"]) . " 12:00";
-	$end = date("Y-m-d",$_GET["selectmenu1"] + 518400) . " 18:00";
-	
-	//set up the header line
-	fputcsv($fp, array("firstname","lastname","email","validfrom","validuntil"," attribute_1 <Service Date>"," attribute_2 <Worship Leader>"));
-	fputcsv($fp, array($_GET["textinput1"],$_GET["textinput2"],$_GET["textinput3"],$start,$end,date("D jS M Y",$_GET["selectmenu1"]),$_GET["selectmenu2"]));
-	fclose($fp);
-	
-	
-	require_once 'class.phpmailer.php';
-
-	$mail = new PHPMailer(true); //defaults to using php "mail()"; the true param means it will throw exceptions on errors, which we need to catch
-
-	try {
-	  
-	  $mail->AddAddress('mail@johnnysheppard.com', 'Johnny Sheppard');
-	  $mail->SetFrom('noreply@johnnysheppard.com', 'SJ Worship Feedback');
-	  $mail->AddReplyTo('noreply@johnnysheppard.com', 'SJ Worship Feedback');
-	  $mail->Subject = 'New St John\'s Worship Feedback Participant';
-	  $mail->AltBody = 'Hi Johnny,\n Here is a new participant.'; // optional - MsgHTML will create an alternate automatically
-	  $mail->MsgHTML('Hi Johnny,<br> Here is a new participant.');
-	  $mail->AddAttachment('tmp/participant.csv');      // attachment
-	  $mail->Send();
-	} catch (phpmailerException $e) {
-	  echo $e->errorMessage(); //Pretty error messages from PHPMailer
-	} catch (Exception $e) {
-	  echo $e->getMessage(); //Boring error messages from anything else!
+	if (isset($_GET["checkbox1"])){
+		$survey_now = 1;
 	}
-	unlink('tmp/participant.csv');
+	
+	require_once 'include/jsonRPCClient.php';
+	require_once 'include/survey_details.php';
+
+	// instanciate a new client 
+	$myJSONRPCClient = new jsonRPCClient( LS_BASEURL.'/index.php/admin/remotecontrol' );
+
+	// receive session key
+	$sessionKey= $myJSONRPCClient->get_session_key( LS_USER, LS_PASSWORD );
+
+
+	//add recipient 2013-01-12 18:52
+	if ($survey_now == 1){ //when adding participant, force limesurvey to think the invite has already been sent so it doesn't send it at a later date. (ie. when the send all pending invites is pressed)
+		$recipient = $myJSONRPCClient->add_participants($sessionKey, $survey_id ,array(array("firstname"=>$_GET["textinput1"],"lastname"=>$_GET["textinput2"],"email"=>$_GET["textinput3"],"attribute_1"=>date("D jS M Y",$_GET["selectmenu1"]),"attribute_2"=>$_GET["selectmenu2"],"emailstatus"=>"OK","sent"=>date("Y-m-d H:i"))),true);
+	}
+	else{
+		$recipient = $myJSONRPCClient->add_participants($sessionKey, $survey_id ,array(array("firstname"=>$_GET["textinput1"],"lastname"=>$_GET["textinput2"],"email"=>$_GET["textinput3"],"attribute_1"=>date("D jS M Y",$_GET["selectmenu1"]),"attribute_2"=>$_GET["selectmenu2"],"emailstatus"=>"OK")),true);
+	}
+
+	/*echo "<pre>";
+	print_r($recipient);
+	echo "</pre>";
+	*/
+
+	//Retrieve Token
+	if (isset($recipient[0]["token"])){
+		$token = $recipient[0]["token"];
+		//echo "<br>$token<br>";
+	}
+
+
+	//send invite
+	if ($survey_now == 0){
+		$invite = $myJSONRPCClient->invite_participants($sessionKey, $survey_id);
+	}	
+
+	/*echo "<pre>";
+	print_r($invite);
+	echo "</pre>";*/
+
+	// release the session key
+	$myJSONRPCClient->release_session_key( $sessionKey );
+	
+	
+	
 }
 ?>
 <!DOCTYPE html>
@@ -66,11 +85,19 @@ if (isset($_GET["selectmenu1"]) && isset($_GET["selectmenu2"]) && isset($_GET["t
 				<h2>
 					Thanks...
 				</h2>
-					Thanks for filling this in. An Invite to the feedback site will be sent to you shortly.
+					Thanks for filling this in.
+				<?php
+				if (isset($token) && ($survey_now == 1)){
+					echo "Please <a href=\"" . LS_BASEURL . "/index.php/survey/index/sid/" . $survey_id . "/token/" . $token . "\">click here</a> to continue.";
+				}
+				else 
+					echo '
+					An Invite to the feedback site will be sent to you shortly.
 					<a data-role="button" data-direction="reverse" data-rel="back" data-transition="fade"
 					href="#" data-icon="arrow-l" data-iconpos="left">
 						Add Another
-					</a>
+					</a>';
+				?>
             </div>
         </div>
         <script>
