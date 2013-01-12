@@ -86,6 +86,12 @@
                         </option>
                     </select>
                 </div>
+				<div data-role="fieldcontain">
+                    <fieldset data-role="controlgroup">
+                        <input type="checkbox" name="checkbox2" id="checkbox2" class="custom" />
+						<label for="checkbox2">Service Leader?</label>
+						</fieldset>
+                </div>
                 <div data-role="fieldcontain">
                     <fieldset data-role="controlgroup">
                         <label for="textinput1">

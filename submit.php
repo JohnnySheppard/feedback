@@ -1,11 +1,15 @@
 <?PHP
 
 $survey_now = 0;
+$service_leader = "N";
 $token = null;
 
 if (isset($_GET["selectmenu1"]) && isset($_GET["selectmenu2"]) && isset($_GET["textinput1"]) && isset($_GET["textinput2"]) && isset($_GET["textinput3"])){
 	if (isset($_GET["checkbox1"])){
 		$survey_now = 1;
+	}
+	if (isset($_GET["checkbox2"])){
+		$service_leader = "Y";
 	}
 	
 	require_once 'include/jsonRPCClient.php';
@@ -20,10 +24,10 @@ if (isset($_GET["selectmenu1"]) && isset($_GET["selectmenu2"]) && isset($_GET["t
 
 	//add recipient 2013-01-12 18:52
 	if ($survey_now == 1){ //when adding participant, force limesurvey to think the invite has already been sent so it doesn't send it at a later date. (ie. when the send all pending invites is pressed)
-		$recipient = $myJSONRPCClient->add_participants($sessionKey, $survey_id ,array(array("firstname"=>$_GET["textinput1"],"lastname"=>$_GET["textinput2"],"email"=>$_GET["textinput3"],"attribute_1"=>date("D jS M Y",$_GET["selectmenu1"]),"attribute_2"=>$_GET["selectmenu2"],"emailstatus"=>"OK","sent"=>date("Y-m-d H:i"))),true);
+		$recipient = $myJSONRPCClient->add_participants($sessionKey, $survey_id ,array(array("firstname"=>$_GET["textinput1"],"lastname"=>$_GET["textinput2"],"email"=>$_GET["textinput3"],"attribute_1"=>date("D jS M Y",$_GET["selectmenu1"]),"attribute_2"=>$_GET["selectmenu2"],"attribute_3"=>$service_leader,"emailstatus"=>"OK","sent"=>date("Y-m-d H:i"))),true);
 	}
 	else{
-		$recipient = $myJSONRPCClient->add_participants($sessionKey, $survey_id ,array(array("firstname"=>$_GET["textinput1"],"lastname"=>$_GET["textinput2"],"email"=>$_GET["textinput3"],"attribute_1"=>date("D jS M Y",$_GET["selectmenu1"]),"attribute_2"=>$_GET["selectmenu2"],"emailstatus"=>"OK")),true);
+		$recipient = $myJSONRPCClient->add_participants($sessionKey, $survey_id ,array(array("firstname"=>$_GET["textinput1"],"lastname"=>$_GET["textinput2"],"email"=>$_GET["textinput3"],"attribute_1"=>date("D jS M Y",$_GET["selectmenu1"]),"attribute_2"=>$_GET["selectmenu2"],"attribute_3"=>$service_leader,"emailstatus"=>"OK")),true);
 	}
 
 	/*echo "<pre>";
