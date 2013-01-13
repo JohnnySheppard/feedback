@@ -92,7 +92,7 @@ if (isset($_GET["selectmenu1"]) && isset($_GET["selectmenu2"]) && isset($_GET["t
 					Thanks for filling this in.
 				<?php
 				if (isset($token) && ($survey_now == 1)){
-					echo "Please <a href=\"" . LS_BASEURL . "/index.php/survey/index/sid/" . $survey_id . "/token/" . $token . "\">click here</a> to continue.";
+					echo "Please <a href=\"" . LS_BASEURL . "/index.php/survey/index/sid/" . $survey_id . "/token/" . $token . "\" rel=\"external\">click here</a> to continue.";
 				}
 				else 
 					echo '
